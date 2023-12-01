@@ -160,6 +160,14 @@ def solve_liao_you_model(tri_values):
                 print(f"Job {i+1} assigned to Machine {j+1}")
 
 
+
+
+
+
+
+
+
+
 tri_values_data = [
     [9, 13, 15, 20],
     [11, 17, 18, 24],
@@ -169,7 +177,7 @@ tri_values_data = [
 
 
 
-solve_wagner_model(tri_values_data)
-solve_wilson_model(tri_values_data)
-solve_manne_model(tri_values_data)
-solve_liao_you_model(tri_values_data)
+# solve_wagner_model(tri_values_data)
+# solve_wilson_model(tri_values_data)
+# solve_manne_model(tri_values_data)
+# solve_liao_you_model(tri_values_data)

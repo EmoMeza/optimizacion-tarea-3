@@ -62,6 +62,9 @@ problema.solve(pulp.PULP_CBC_CMD(msg=0))
 end_time = time.time()
 elapsed_time = end_time - start_time
 
+# Imprimir el tiempo
+print("Tiempo:", elapsed_time)
+
 # Imprimir los resultados
 print("Estado:", pulp.LpStatus[problema.status])
 print("Valor objetivo:", pulp.value(problema.objective))

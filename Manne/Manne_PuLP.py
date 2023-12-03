@@ -12,7 +12,7 @@ T = [
     [20, 24, 18, 15],
 ]
 
-# Constants
+# Constantes
 M = len(T[0])  # Número de máquinas
 N = len(T)     # Número de trabajos
 
@@ -52,22 +52,22 @@ for r in range(M):
 for i in range(N):
     problema += Cmax >= C[M-1, i]
 
-# Start timing
+# Comenzar a medir el tiempo
 start_time = time.time()
 
 # Resolver
 problema.solve(pulp.PULP_CBC_CMD(msg=0))
 
-# End timing
+# Terminar de medir el tiempo
 end_time = time.time()
 elapsed_time = end_time - start_time
 
-# Print the results
-print("Status:", pulp.LpStatus[problema.status])
-print("Objective value:", pulp.value(problema.objective))
+# Imprimir los resultados
+print("Estado:", pulp.LpStatus[problema.status])
+print("Valor objetivo:", pulp.value(problema.objective))
 print("Cmax:", pulp.value(Cmax))
 
-# Gantt chart
+# Gráfico de Gantt
 
 # Crear la matriz de tiempos
 matrix = []

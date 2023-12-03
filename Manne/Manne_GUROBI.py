@@ -1,13 +1,14 @@
 import gurobipy as gp
 from gurobipy import GRB
 
-# Define the number of tasks and machines
+# Definir el número de tareas y máquinas
+# Como son 4 y 4 se deja en una sola variable
 n = 4
 
-# Define a large constant
+# Definir una constante grande
 P = 10000
 
-# Define the processing time matrix T
+# Definir la matriz de tiempos de procesamiento T
 T = [
     [9, 11, 8, 6],
     [13, 17, 12, 10],
@@ -15,18 +16,18 @@ T = [
     [20, 24, 18, 15],
 ]
 
-# Create a model
+# Crear un modelo
 model = gp.Model("manne")
 
-# Create variables
+# Crear variables
 C = {(r, i): model.addVar(lb=0, vtype=GRB.CONTINUOUS) for r in range(n) for i in range(n)}
 D = [[model.addVar(vtype=GRB.BINARY) for _ in range(n)] for _ in range(n)]
 Cmax = model.addVar(lb=0, vtype=GRB.CONTINUOUS)
 
-# Objective function
+# Función objetivo
 model.setObjective(Cmax, GRB.MINIMIZE)
 
-# Constraints
+# Restricciones
 # (13)
 for i in range(n):
     model.addConstr(C[(0, i)] >= T[0][i])
@@ -47,12 +48,12 @@ for r in range(n):
 for i in range(n):
     model.addConstr(Cmax >= C[(n-1, i)])
 
-# Optimize the model
+# Optimizar el modelo
 model.optimize()
 
-# Print the solution
+# Imprimir la solución
 if model.status == GRB.OPTIMAL:
-    print(f"Objective value: {model.objVal}")
+    print(f"Valor objetivo: {model.objVal}")
     # for r in range(n):
     #     for i in range(n):
     #         print(f"C[{r}][{i}]: {C[(r, i)].X}")
@@ -60,9 +61,9 @@ if model.status == GRB.OPTIMAL:
     #     for k in range(n):
     #         print(f"D[{i}][{k}]: {D[i][k].X}")
 else:
-    print("No solution found")
+    print("No se encontró solución")
 
-# Gantt chart
+# Gráfico de Gantt
 import matplotlib.pyplot as plt
 import numpy as np
 

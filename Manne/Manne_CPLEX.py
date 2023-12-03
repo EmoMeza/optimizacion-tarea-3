@@ -1,12 +1,13 @@
 from docplex.mp.model import Model
 
-# Define the number of tasks and machines
+# Definir el número de tareas y máquinas
+# Como son 4 y 4 se deja en una sola variable
 n = 4
 
-# Define a large constant
+# Definir una constante grande
 P = 10000
 
-# Define the processing time matrix T
+# Definir la matriz de tiempos de procesamiento T
 T = [
     [9, 11, 8, 6],
     [13, 17, 12, 10],
@@ -14,18 +15,18 @@ T = [
     [20, 24, 18, 15],
 ]
 
-# Create a model
+# Crear un modelo
 mdl = Model("manne cplex")
 
-# Create variables
+# Crear variables
 C = {(r, i): mdl.continuous_var(lb=0) for r in range(n) for i in range(n)}
 D = [[mdl.binary_var() for _ in range(n)] for _ in range(n)]
 Cmax = mdl.continuous_var(lb=0)
 
-# Objective function
+# Función objetivo
 mdl.minimize(Cmax)
 
-# Constraints
+# Restricciones
 # (13)
 for i in range(n):
     mdl.add_constraint(C[(0, i)] >= T[0][i])
@@ -46,13 +47,13 @@ for r in range(n):
 for i in range(n):
     mdl.add_constraint(Cmax >= C[(n-1, i)])
 
-# Solve the model
+# Resolver el modelo
 solution = mdl.solve()
 
-# Print the solution
+# Imprimir la solución
 if solution:
-    print(f"Solution status: {mdl.get_solve_status()}")
-    print(f"Objective value: {solution.objective_value}")
+    print(f"Estado de la solución: {mdl.get_solve_status()}")
+    print(f"Valor objetivo: {solution.objective_value}")
     # for r in range(n):
     #     for i in range(n):
     #         print(f"C[{r}][{i}]: {C[(r, i)].solution_value}")
@@ -60,9 +61,9 @@ if solution:
     #     for k in range(n):
     #         print(f"D[{i}][{k}]: {D[i][k].solution_value}")
 else:
-    print("No solution found")
+    print("No se encontró solución")
 
-# Gantt chart
+# Gráfico de Gantt
 import matplotlib.pyplot as plt
 import numpy as np
 

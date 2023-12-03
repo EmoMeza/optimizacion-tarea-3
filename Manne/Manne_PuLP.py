@@ -3,6 +3,7 @@ import pulp as lp
 import time
 import matplotlib.pyplot as plt
 import numpy as np
+
 # Matriz T transpuesta
 T = [
     [9, 11, 8, 6],
@@ -12,13 +13,13 @@ T = [
 ]
 
 # Constants
-M = len(T[0])  # máquinas
-N = len(T)     # trabajos
+M = len(T[0])  # Número de máquinas
+N = len(T)     # Número de trabajos
 
 # Modelo Manne con PuLP
 problema = pulp.LpProblem("PFSP", pulp.LpMinimize)
 
-# Variables
+# Variables de decisión
 P = 1000
 D = pulp.LpVariable.dicts("D", ((i, j) for i in range(N) for j in range(N)), cat='Binary')
 C = pulp.LpVariable.dicts("C", ((i, j) for i in range(M) for j in range(N)), lowBound=0, cat='Continuous')
@@ -51,7 +52,6 @@ for r in range(M):
 for i in range(N):
     problema += Cmax >= C[M-1, i]
 
-
 # Start timing
 start_time = time.time()
 
@@ -69,6 +69,7 @@ print("Cmax:", pulp.value(Cmax))
 
 # Gantt chart
 
+# Crear la matriz de tiempos
 matrix = []
 for r in range(M):
     machine = []
@@ -76,18 +77,21 @@ for r in range(M):
         machine.append([lp.value(C[r, i]) - T[r][i], lp.value(C[r, i])])
     matrix.append(machine)
 
+# Crear el gráfico con Matplotlib
 fig, gantt = plt.subplots(figsize=(10, 5))
-gantt.set_title('Manne PuLP')  # Add this line to set the title
-gantt.set_xlabel('Time')
-gantt.set_ylabel('Machines')
+gantt.set_title('Manne PuLP')  # Añadir este título
+gantt.set_xlabel('Tiempo')
+gantt.set_ylabel('Máquinas')
 gantt.set_xlim(0, lp.value(problema.objective))
 gantt.set_ylim(0, M * 10)
 gantt.set_yticks(np.arange(5, M * 10, 10))
 gantt.set_yticklabels(['M' + str(i) for i in range(1, M+1)])
 gantt.grid(True, which='both', axis='y', linestyle='--', linewidth=0.5)
 
-colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']  # Define as many colors as you have jobs
+# Definir colores para las barras de Gantt
+colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
 
+# Iterar sobre máquinas y trabajos para crear las barras
 for r in range(M):
     for j in range(N):
         start = matrix[r][j][0]
@@ -96,5 +100,5 @@ for r in range(M):
         gantt.text(x=(start + duration/4), y=((r) * 10 + 6), s='Trabajo '+str(j+1), va='center', color='black')
         gantt.text(x=(start + duration/4), y=((r) * 10 + 3), s=str(duration), va='center', color='black')
 
-
+# Mostrar el gráfico
 plt.show()

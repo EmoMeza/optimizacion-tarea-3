@@ -26,19 +26,23 @@ Cmax = mdl.continuous_var(lb=0)
 mdl.minimize(Cmax)
 
 # Constraints
+# (13)
 for i in range(n):
     mdl.add_constraint(C[(0, i)] >= T[0][i])
 
+# (14)
 for r in range(1, n):
     for i in range(n):
         mdl.add_constraint(C[(r, i)] - C[(r-1, i)] >= T[r][i])
 
+# (15) y (16)
 for r in range(n):
     for k in range(1, n):
         for i in range(k):
             mdl.add_constraint(C[(r, i)] - C[(r, k)] + P*(1 - D[i][k]) >= T[r][i])
             mdl.add_constraint(C[(r, i)] - C[(r, k)] + P*(1 - D[i][k]) <= P - T[r][k])
 
+# (17)
 for i in range(n):
     mdl.add_constraint(Cmax >= C[(n-1, i)])
 
@@ -62,6 +66,7 @@ else:
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Crear la matriz de tiempos
 matrix = []
 for r in range(n):
     machine = []
@@ -69,18 +74,21 @@ for r in range(n):
         machine.append([C[(r, i)].solution_value - T[r][i], C[(r, i)].solution_value])
     matrix.append(machine)
 
+# Crear el gráfico con Matplotlib
 fig, gantt = plt.subplots(figsize=(10, 5))
-gantt.set_title('Manne CPLEX')  # Add this line to set the title
-gantt.set_xlabel('Time')
-gantt.set_ylabel('Machines')
+gantt.set_title('Manne CPLEX')  # Añadir este título
+gantt.set_xlabel('Tiempo')
+gantt.set_ylabel('Máquinas')
 gantt.set_xlim(0, solution.objective_value)
 gantt.set_ylim(0, n * 10)
 gantt.set_yticks(np.arange(5, n * 10, 10))
 gantt.set_yticklabels(['M' + str(i) for i in range(1, n+1)])
 gantt.grid(True, which='both', axis='y', linestyle='--', linewidth=0.5)
 
-colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']  # Define as many colors as you have jobs
+# Definir colores para las barras de Gantt
+colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
 
+# Iterar sobre máquinas y trabajos para crear las barras
 for r in range(n):
     for j in range(n):
         start = matrix[r][j][0]
@@ -89,4 +97,5 @@ for r in range(n):
         gantt.text(x=(start + duration/4), y=((r) * 10 + 6), s='Trabajo '+str(j+1), va='center', color='black')
         gantt.text(x=(start + duration/4), y=((r) * 10 + 3), s=str(duration), va='center', color='black')
 
+# Mostrar el gráfico
 plt.show()

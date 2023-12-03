@@ -1,5 +1,8 @@
 import pulp
-
+import pulp as lp
+import time
+import matplotlib.pyplot as plt
+import numpy as np
 # Matriz T transpuesta
 T = [
     [9, 11, 8, 6],
@@ -48,15 +51,50 @@ for r in range(M):
 for i in range(N):
     problema += Cmax >= C[M-1, i]
 
+
+# Start timing
+start_time = time.time()
+
 # Resolver
 problema.solve(pulp.PULP_CBC_CMD(msg=0))
+
+# End timing
+end_time = time.time()
+elapsed_time = end_time - start_time
 
 # Print the results
 print("Status:", pulp.LpStatus[problema.status])
 print("Objective value:", pulp.value(problema.objective))
 print("Cmax:", pulp.value(Cmax))
-# print("C matrix:")
-# for r in range(M):
-#     for i in range(N):
-#         print(pulp.value(C[(r, i)]), end=" ")
-#     print()
+
+# Gantt chart
+
+matrix = []
+for r in range(M):
+    machine = []
+    for i in range(N):
+        machine.append([lp.value(C[r, i]) - T[r][i], lp.value(C[r, i])])
+    matrix.append(machine)
+
+fig, gantt = plt.subplots(figsize=(10, 5))
+gantt.set_title('Manne PuLP')  # Add this line to set the title
+gantt.set_xlabel('Time')
+gantt.set_ylabel('Machines')
+gantt.set_xlim(0, lp.value(problema.objective))
+gantt.set_ylim(0, M * 10)
+gantt.set_yticks(np.arange(5, M * 10, 10))
+gantt.set_yticklabels(['M' + str(i) for i in range(1, M+1)])
+gantt.grid(True, which='both', axis='y', linestyle='--', linewidth=0.5)
+
+colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']  # Define as many colors as you have jobs
+
+for r in range(M):
+    for j in range(N):
+        start = matrix[r][j][0]
+        duration = matrix[r][j][1] - matrix[r][j][0]
+        gantt.broken_barh([(start, duration)], ((r) * 10, 9), facecolors=colors[j])
+        gantt.text(x=(start + duration/4), y=((r) * 10 + 6), s='Trabajo '+str(j+1), va='center', color='black')
+        gantt.text(x=(start + duration/4), y=((r) * 10 + 3), s=str(duration), va='center', color='black')
+
+
+plt.show()

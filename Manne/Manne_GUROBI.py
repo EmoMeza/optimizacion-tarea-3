@@ -86,7 +86,7 @@ for r in range(n):
         start = matrix[r][j][0]
         duration = matrix[r][j][1] - matrix[r][j][0]
         gantt.broken_barh([(start, duration)], ((r) * 10, 9), facecolors=colors[j])
-        gantt.text(x=(start + 0.5 * duration), y=((r) * 10 + 6), s='J'+str(j+1), va='center', color='black', fontweight='bold')
-        gantt.text(x=(start + 0.5 * duration), y=((r) * 10 + 3), s='('+str(duration)+')', va='center', color='black', fontweight='bold')
+        gantt.text(x=(start + duration/4), y=((r) * 10 + 6), s='Trabajo '+str(j+1), va='center', color='black')
+        gantt.text(x=(start + duration/4), y=((r) * 10 + 3), s=str(duration), va='center', color='black')
 
 plt.show()

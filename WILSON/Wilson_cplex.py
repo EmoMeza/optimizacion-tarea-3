@@ -44,8 +44,10 @@ for r in range(1, N):
         mdl.add_constraint(B[r, j] + mdl.sum(T[r][i] * Z[i, j] for i in range(N)) <= B[r, j+1])
 
 # Resolver el problema
+tiempo_wilsoncplex = time.time()
 solution = mdl.solve()
-
+tiempo_wilsoncplex = time.time() - tiempo_wilsoncplex
+print("Tiempo de ejecución:", tiempo_wilsoncplex)
 # Imprimir el estado de la solución
 print("Status:", "Optimal" if solution else "No solution found")
 

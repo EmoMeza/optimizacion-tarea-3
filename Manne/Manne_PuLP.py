@@ -58,12 +58,18 @@ start_time = time.time()
 # Resolver
 problema.solve(pulp.PULP_CBC_CMD(msg=0))
 
+
+
+
 # Terminar de medir el tiempo
 end_time = time.time()
-elapsed_time = end_time - start_time
+tiempoMannePuLP = end_time - start_time
 
+
+# Guardamos el valor de la función objetivo
+solucionMannePuLP = pulp.value(Cmax)
 # Imprimir el tiempo
-print("Tiempo:", elapsed_time)
+print("Tiempo:", tiempoMannePuLP)
 
 # Imprimir los resultados
 print("Estado:", pulp.LpStatus[problema.status])

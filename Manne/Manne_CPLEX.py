@@ -57,10 +57,10 @@ solution = mdl.solve()
 
 # Terminar de medir el tiempo
 end_time = time.time()
-elapsed_time = end_time - start_time
+tiempoManeCPLEX = end_time - start_time
 
 # Imprimir el tiempo
-print(f"Tiempo: {elapsed_time}")
+print(f"Tiempo: {tiempoManeCPLEX}")
 
 # Imprimir la solución
 if solution:
@@ -74,6 +74,9 @@ if solution:
     #         print(f"D[{i}][{k}]: {D[i][k].solution_value}")
 else:
     print("No se encontró solución")
+
+# Guardamos el valor de la función objetivo
+solucionManneCPLEX = solution.objective_value
 
 # Gráfico de Gantt
 import matplotlib.pyplot as plt

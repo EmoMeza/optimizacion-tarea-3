@@ -58,10 +58,13 @@ model.optimize()
 
 # Terminar de medir el tiempo
 end_time = time.time()
-elapsed_time = end_time - start_time
+tiempoManneGUROBI = end_time - start_time
+
+# Guardamos el valor de la función objetivo
+solucionManneGUROBI = model.objVal
 
 # Imprimir el tiempo
-print(f"Tiempo: {elapsed_time}")
+print(f"Tiempo: {tiempoManneGUROBI}")
 
 # Imprimir la solución
 if model.status == GRB.OPTIMAL:

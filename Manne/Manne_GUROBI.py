@@ -1,3 +1,4 @@
+import time
 import gurobipy as gp
 from gurobipy import GRB
 
@@ -48,8 +49,19 @@ for r in range(n):
 for i in range(n):
     model.addConstr(Cmax >= C[(n-1, i)])
 
+
+# Comenzar a medir el tiempo
+start_time = time.time()
+
 # Optimizar el modelo
 model.optimize()
+
+# Terminar de medir el tiempo
+end_time = time.time()
+elapsed_time = end_time - start_time
+
+# Imprimir el tiempo
+print(f"Tiempo: {elapsed_time}")
 
 # Imprimir la solución
 if model.status == GRB.OPTIMAL:

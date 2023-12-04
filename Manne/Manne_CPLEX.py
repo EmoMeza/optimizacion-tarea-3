@@ -1,3 +1,4 @@
+import time
 from docplex.mp.model import Model
 
 # Definir el número de tareas y máquinas
@@ -47,8 +48,19 @@ for r in range(n):
 for i in range(n):
     mdl.add_constraint(Cmax >= C[(n-1, i)])
 
+
+# Comenzar a medir el tiempo
+start_time = time.time()
+
 # Resolver el modelo
 solution = mdl.solve()
+
+# Terminar de medir el tiempo
+end_time = time.time()
+elapsed_time = end_time - start_time
+
+# Imprimir el tiempo
+print(f"Tiempo: {elapsed_time}")
 
 # Imprimir la solución
 if solution:

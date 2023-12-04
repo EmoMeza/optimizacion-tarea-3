@@ -60,7 +60,7 @@ end_time = time.time()
 elapsed_time = end_time - start_time
 
 # Imprimir el tiempo
-print(f"Tiempo: {elapsed_time:.2f}")
+print(f"Tiempo: {elapsed_time}")
 
 # Imprimir la solución
 if solution:
